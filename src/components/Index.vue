@@ -9,9 +9,10 @@
             <option value="GBP">Pound Sterling (GBP)</option>
             <option value="EUR">Euro (EUR)</option>
             <option value="AED">United Arab Emirates dirham (AED)</option>
+            <option value="MYR">Malaysia (MYR)</option>
         </select>
 
-        <input type="number" id="amount" placeholder="Amount" v-model="amount">
+        <input type="number" id="amount" placeholder="Amount" v-model="amount" />
         <span class="input-text">To</span>
         <select id="to-currency" v-model="toCurrency">
             <option value="">Select currency</option>
@@ -19,15 +20,18 @@
             <option value="EUR">Euro (EUR)</option>
             <option value="GBP">Pound Sterling (GBP)</option>
             <option value="USD">US Dollar (USD)</option>
+            <option value="MYR">Malaysia (MYR)</option>
         </select>
 
-        <button type="button" id="convert-btn" @click="clickConvert()">Convert</button>
+        <button type="button" id="convert-btn" @click="clickConvert()">
+            Convert
+        </button>
         <!-- <button type = "button" id = "clear-btn" @click = "clear()">Clear</button> -->
-
     </div>
     <div id="result-container" v-if="convertClicked">
         <h2 id="result" v-if="!loading">
-            <span id="from-span">{{amount}} {{fromCurrency}}</span> = <span id="to-span">{{result}} {{toCurrency}}</span>
+            <span id="from-span">{{ amount }} {{ fromCurrency }}</span> =
+            <span id="to-span">{{ result }} {{ toCurrency }}</span>
         </h2>
         <h2 v-else>Loading...</h2>
     </div>
@@ -37,86 +41,104 @@
 <script>
 //import { mapGetters } from 'vuex'
 export default {
-    name: 'Index', //App
+    name: "Index", //App
     components: {
         //History,
     },
     data() {
         return {
-            apiKey: 'da87694f32msh84ee7bf60ee75c2p18f40ejsn5fe58c757632',
-            fromCurrency: '',
-            toCurrency: '',
+            apiKey: "da87694f32msh84ee7bf60ee75c2p18f40ejsn5fe58c757632",
+            fromCurrency: "",
+            toCurrency: "",
             amount: 0,
             result: 0,
             convertClicked: false,
-            loading: false,
-        }
+            loading: false
+        };
     },
     methods: {
-
         clickConvert() {
-            if (!(this.fromCurrency == '' || this.toCurrency == '' || (this.amount <= 0) || this.fromCurrency == this.toCurrency)) {
-                this.convertClicked = true
-
+            if (
+                !(
+                    this.fromCurrency == "" ||
+                    this.toCurrency == "" ||
+                    this.amount <= 0 ||
+                    this.fromCurrency == this.toCurrency
+                )
+            ) {
+                this.convertClicked = true;
             }
-            this.convert()
+            this.convert();
         },
 
         convert() {
-            if (this.fromCurrency == '' || this.toCurrency == '' || (this.amount <= 0) || this.fromCurrency == this.toCurrency) {
-                alert("Please check your inputs and try again")
+            if (
+                this.fromCurrency == "" ||
+                this.toCurrency == "" ||
+                this.amount <= 0 ||
+                this.fromCurrency == this.toCurrency
+            ) {
+                alert("Please check your inputs and try again");
             } else {
-                this.loading = true
-                let uri = 'https://currency-exchange.p.rapidapi.com/exchange?from=' + this.fromCurrency + '&to=' + this.toCurrency + '&q=' + this.amount
+                this.loading = true;
+                let uri =
+                    "https://currency-exchange.p.rapidapi.com/exchange?from=" +
+                    this.fromCurrency +
+                    "&to=" +
+                    this.toCurrency +
+                    "&q=" +
+                    this.amount;
                 fetch(uri, {
-                        "method": "GET",
-                        "headers": {
+                        method: "GET",
+                        headers: {
                             "x-rapidapi-host": "currency-exchange.p.rapidapi.com",
                             "x-rapidapi-key": this.apiKey,
-                            "useQueryString": true
+
                         }
                     })
                     .then(response => {
                         if (response.ok) {
-                            response.json()
-                                .then(response1 => {
-                                    this.result = response1.result
-                                    this.loading = false
-                                    //this.$store.commit('addToHistory',{fromCurrency: this.fromCurrency, toCurrency: this.toCurrency, amount: this.amount, result: this.result})
-                                })
+                            response.json().then(response1 => {
+                                this.result = response1.result;
+                                this.loading = false;
+                                //this.$store.commit('addToHistory',{fromCurrency: this.fromCurrency, toCurrency: this.toCurrency, amount: this.amount, result: this.result})
+                            });
                         }
                     })
                     .catch(err => {
-                        alert("There was a problem fetching the results. Please try again." + err)
-                    })
+                        alert(
+                            "There was a problem fetching the results. Please try again." +
+                            err
+                        );
+                    });
             }
         },
 
         clear() {
-            this.amount = 0
-            this.fromCurrency = ''
-            this.toCurrency = ''
-            this.convertClicked = false
+            this.amount = 0;
+            this.fromCurrency = "";
+            this.toCurrency = "";
+            this.convertClicked = false;
         }
     },
 
     watch: {
         amount: function () {
-            this.convertClicked = false
+            this.convertClicked = false;
         },
         fromCurrency: function () {
-            this.convertClicked = false
+            this.convertClicked = false;
         },
         toCurrency: function () {
-            this.convertClicked = false
+            this.convertClicked = false;
         }
     }
-}
+};
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css?family=Sen&display=swap');
-@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Sen&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
 
 * {
     margin: 0;
@@ -135,7 +157,7 @@ export default {
     border-bottom: 2px solid #000;
     width: 80%;
     margin: auto;
-    font-family: 'Sen', sans-serif;
+    font-family: "Sen", sans-serif;
 }
 
 #input-container {
@@ -159,11 +181,11 @@ export default {
 #result-container {
     padding: 15px;
     margin-top: 20px;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 
 #from-span {
-    color: #DA3732;
+    color: #da3732;
 }
 
 #to-span {
@@ -181,7 +203,7 @@ export default {
 
 #convert-btn {
     background-color: #008000;
-    color: #fff
+    color: #fff;
 }
 
 #clear-btn {
@@ -189,6 +211,6 @@ export default {
 }
 
 .input-text {
-    font-family: 'Roboto', sans-serif;
+    font-family: "Roboto", sans-serif;
 }
 </style>
