@@ -74,20 +74,21 @@ export default {
                         "method": "GET",
 
                     })
-                    .then(response => {
-                        if (response.ok) {
+                    .then((response => response.json()))
+                    .then(function (data) {
 
-                            var jsResult = response.json();
-                            var oneUnit = jsResult.rates[this.toCurrency] / jsResult.rates[this.fromCurrency];
-                            //var amt = document.getElementById("fromAmount").value;
-                            this.result = parseFloat(oneUnit * this.fromAmount).toFixed(3);
+                        var jsResult = data.result;
+                        var oneUnit = jsResult.rates[this.toCurrency] / jsResult.rates[this.fromCurrency];
+                        //var amt = document.getElementById("fromAmount").value;
+                        this.result = parseFloat(oneUnit * this.fromAmount).toFixed(3);
+                        this.loading = false
 
-                            .then(response1 => {
-                                this.result = response1.result
-                                this.loading = false
-                                //this.$store.commit('addToHistory',{fromCurrency: this.fromCurrency, toCurrency: this.toCurrency, amount: this.amount, result: this.result})
-                            })
-                        }
+                        /* .then(response1 => {
+                             this.result = response1.result
+                             this.loading = false
+                             //this.$store.commit('addToHistory',{fromCurrency: this.fromCurrency, toCurrency: this.toCurrency, amount: this.amount, result: this.result})
+                         })*/
+
                     })
                     .catch(err => {
                         alert("There was a problem fetching the results. Please try again." + err)
@@ -101,18 +102,18 @@ export default {
             this.toCurrency = ''
             this.convertClicked = false
         }
-    },
 
-    watch: {
-        amount: function () {
-            this.convertClicked = false
-        },
-        fromCurrency: function () {
-            this.convertClicked = false
-        },
-        toCurrency: function () {
-            this.convertClicked = false
-        }
+        /*watch: {
+            amount: function () {
+                this.convertClicked = false
+            },
+            fromCurrency: function () {
+                this.convertClicked = false
+            },
+            toCurrency: function () {
+                this.convertClicked = false
+            }
+        }*/
     }
 }
 </script>
