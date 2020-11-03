@@ -35,6 +35,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 //import { mapGetters } from 'vuex'
 export default {
     name: 'Index', //App
