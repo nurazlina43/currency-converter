@@ -9,9 +9,10 @@
             <option value="GBP">Pound Sterling (GBP)</option>
             <option value="EUR">Euro (EUR)</option>
             <option value="AED">United Arab Emirates dirham (AED)</option>
+            <option value="MYR">Malaysia (MYR)</option>
         </select>
 
-        <input type="number" id="from-amount" placeholder="Amount" v-model="fromAmount">
+        <input type="number" id="from-amount" placeholder="Amount" v-model="fromAmount" />
         <span class="input-text">To</span>
         <select id="to-currency" v-model="toCurrency">
             <option value="">Select currency</option>
@@ -19,15 +20,18 @@
             <option value="EUR">Euro (EUR)</option>
             <option value="GBP">Pound Sterling (GBP)</option>
             <option value="USD">US Dollar (USD)</option>
+            <option value="MYR">Malaysia (MYR)</option>
         </select>
 
-        <button type="button" id="convert-btn" @click="clickConvert()">Convert</button>
+        <button type="button" id="convert-btn" @click="clickConvert()">
+            Convert
+        </button>
         <!-- <button type = "button" id = "clear-btn" @click = "clear()">Clear</button> -->
-
     </div>
     <div id="result-container" v-if="convertClicked">
         <h2 id="result" v-if="!loading">
-            <span id="from-span">{{fromAmount}} {{fromCurrency}}</span> = <span id="to-span">{{result}} {{toCurrency}}</span>
+            <span id="from-span">{{ fromAmount }} {{ fromCurrency }}</span> =
+            <span id="to-span">{{ result }} {{ toCurrency }}</span>
         </h2>
         <h2 v-else>Loading...</h2>
     </div>
@@ -78,10 +82,19 @@ export default {
                     .then((response => response.json()))
                     .then(function (data) {
 
-                        var jsResult = data.result;
-                        var oneUnit = jsResult.rates[this.toCurrency] / jsResult.rates[this.fromCurrency];
+                        console.log(data.rates)
+
+                        for (let [key, value] of Object.entries(data.rates))
+
+                            //var result = value * baseNumber
+                            var jsResult = data.rates;
+                        var toCurrency = JSON.parse(this.toCurrency);
+                        var fromCurrency = JSON.parse(this.fromCurrency);
+                        var fromAmount = JSON.parse(this.fromAmount);
+                        var oneUnit = jsResult.toCurrency / jsResult.fromCurrency;
                         //var amt = document.getElementById("fromAmount").value;
-                        this.result = parseFloat(oneUnit * this.fromAmount).toFixed(3);
+                        this.result = parseFloat(oneUnit * fromAmount);
+                        //this.result = parseFloat(oneUnit * fromAmount).toFixed(3);
                         this.loading = false
 
                         /* .then(response1 => {
