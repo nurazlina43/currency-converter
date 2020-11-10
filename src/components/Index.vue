@@ -40,6 +40,7 @@
 
 <script>
 /* eslint-disable */
+import axios from 'axios'
 //import { mapGetters } from 'vuex'
 export default {
     name: 'Index', //App
@@ -52,7 +53,7 @@ export default {
             fromCurrency: '',
             toCurrency: '',
             fromAmount: 0,
-            result: 0,
+            result: '',
             convertClicked: false,
             loading: false,
         }
@@ -72,8 +73,7 @@ export default {
                 alert("Please check your inputs and try again")
             } else {
                 this.loading = true
-                //var from = document.getElementById("from-currency").value;
-                //var to = document.getElementById("to-currency").value;
+
                 let uri = 'https://api.exchangeratesapi.io/latest?symbols=' + this.fromCurrency + "," + this.toCurrency;
                 fetch(uri, {
                         "method": "GET",
@@ -86,15 +86,17 @@ export default {
 
                         for (let [key, value] of Object.entries(data.rates))
 
-                            //var result = value * baseNumber
                             var jsResult = data.rates;
-                        var toCurrency = JSON.parse(this.toCurrency);
-                        var fromCurrency = JSON.parse(this.fromCurrency);
-                        var fromAmount = JSON.parse(this.fromAmount);
+
+                        var toCurrency = response.json(this.toCurrency);
+                        var fromCurrency = response.json(this.fromCurrency);
+                        var fromAmount = response.json(this.fromAmount);
+                        var result = this.result;
+
                         var oneUnit = jsResult.toCurrency / jsResult.fromCurrency;
-                        //var amt = document.getElementById("fromAmount").value;
-                        this.result = parseFloat(oneUnit * fromAmount);
+                        result = (oneUnit * fromAmount).toFixed(2);
                         //this.result = parseFloat(oneUnit * fromAmount).toFixed(3);
+
                         this.loading = false
 
                         /* .then(response1 => {
@@ -108,6 +110,7 @@ export default {
                         alert("There was a problem fetching the results. Please try again." + err)
                     })
             }
+
         },
 
         clear() {
